@@ -2,9 +2,8 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class Varchar implements \obray\reflectdb\dataTypes\DataTypeInterface
+class Text implements \obray\reflectdb\dataTypes\DataTypeInterface
 {
-    protected int $size = 255;
     protected ?string $value;
 
     public function __construct(?string $value)

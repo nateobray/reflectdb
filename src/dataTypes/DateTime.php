@@ -2,20 +2,25 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class DateTime implements \obray\reflectdb\dataTypes\DateTypeInterface
+class DateTime implements \obray\reflectdb\dataTypes\DataTypeInterface
 {
-    public function __construct(string $datetime)
+    public function __construct($datetime)
     {
         $this->value = new \DateTime($datetime);
     }
 
-    public function getValue(): \DateTime
+    public function __getSQLDataType()
+    {
+        return \PDO::PARAM_STRING|\PDO::PARAM_NULL;
+    }
+
+    public function getValue()
     {
         return $this->value;
     }
 
     public function __toSQL(string $column): string
     {
-        return '`'. $column . '` datetime ' . (!empty($this->default)?'DEFAULT '.$this->default:'DEFAULT NULL');
+        return '"' . $this->value->format("Y-m-d H:i:s") . '"';
     }
 }

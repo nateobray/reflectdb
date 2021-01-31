@@ -2,8 +2,8 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class Integer extends \obray\reflectdb\dataTypes\Integer
+class IntegerTiny extends \obray\reflectdb\dataTypes\Integer
 {
-    private int $size = 4;
-    private bool $unsigned = false;
+    protected int $size = 4;
+    protected bool $unsigned = false;
 }

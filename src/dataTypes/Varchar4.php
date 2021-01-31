@@ -4,5 +4,5 @@ namespace obray\reflectdb\dataTypes;
 
 class Varchar4 extends \obray\reflectdb\dataTypes\Varchar
 {
-    private int $size = 4;
+    protected int $size = 4;
 }

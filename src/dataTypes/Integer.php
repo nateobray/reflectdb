@@ -6,15 +6,15 @@ use \obray\reflectdb\dataTypes\DataTypeInterface;
 
 class Integer implements DataTypeInterface
 {
-    private int $size = 11;
-    private bool $unsigned = false;
-    private bool $isNullable = true;
-    private bool $zeroFilled = false;
-    private bool $autoincrement = false;
-    private bool $nullable = true;
-    private ?int $default = null;
+    protected int $size = 11;
+    protected bool $unsigned = false;
+    protected bool $isNullable = true;
+    protected bool $zeroFilled = false;
+    protected bool $autoincrement = false;
+    protected bool $nullable = true;
+    protected ?int $default = null;
 
-    private ?int $value = null;
+    protected ?int $value = null;
 
     public function __construct($value)
     {
@@ -26,6 +26,11 @@ class Integer implements DataTypeInterface
         return $this->value;
     }
 
+    public function __getSQLDataType()
+    {
+        return \PDO::PARAM_INT|\PDO::PARAM_NULL;
+    }
+
     public function __toSQL(string $column): string
     {
         $sql = 'int(' . $this->size . ') '
@@ -34,5 +39,10 @@ class Integer implements DataTypeInterface
              . ' DEFAULT '
              . ($this->default==null?'NULL':$this->default);
         return $sql;
+    }
+
+    public function __toSQLWhere(string $column, $operator='=')
+    {
+        return $column . $operator . ':'.$column;
     }
 }

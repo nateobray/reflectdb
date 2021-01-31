@@ -2,31 +2,10 @@
 
 namespace obray\reflectdb;
 
-class DB
+class DB implements \JsonSerializable
 {
-    private ?string $table = null;
-    private ?string $primaryKey = null;
 
-    public function createTable(): void
-    {
-        $sql = "CREATE TABLE " . $this->table;
-        $ref = new \ReflectionClass(get_called_class());
-        $properties = $ref->getProperties();
-
-        forEach($properties as $property){
-            $type = $property->getType();
-            if($type !== null){
-                print_r($type->getName() . "\n");
-            }
-            
-            print_r($property->name . "\n");
-        }
-
-        print_r($properties);
-        
-        return;
-    }
-
+    private array $joinProperties = [];
 
     public function __set(string $key, $value)
     {
@@ -50,9 +29,48 @@ class DB
         }
     }
     
-
     public function dropTable(): void
     {
         return;
+    }
+
+    public function addJoinProperty($property)
+    {
+        $this->joinProperties[] = $property;
+    }
+
+    public function jsonSerialize() 
+    {    
+        $calledClass = get_called_class();
+        $properties = get_class_vars($calledClass);
+        $obj = [];
+        // encode our columns
+        forEach($properties as $key => $value){
+            if(strpos($key, 'col_', 0) === 0){
+                $obj[str_replace('col_','',$key)] = $this->{$key}->getValue();    
+            }
+        }
+        // encode our joins
+        if(!empty($this->joinProperties)){
+            forEach($this->joinProperties as $property){
+                $obj[$property] = $this->{$property};
+            }
+        }
+        return $obj;
+    }
+
+    public function getValues()
+    {
+        $calledClass = get_called_class();
+        $properties = get_class_vars($calledClass);
+        
+        // encode our columns
+        $values = [];
+        forEach($properties as $key => $value){
+            if(strpos($key, 'col_', 0) === 0 && !empty($this->{$key})){
+                $values[str_replace('col_','',$key)] = $this->{$key};    
+            }
+        }
+        return $values;
     }
 }
