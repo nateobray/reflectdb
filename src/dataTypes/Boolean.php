@@ -2,7 +2,7 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class Boolean implements \obray\reflectdb\dataTypes\DataTypeInterface
+class Boolean implements \obray\reflectdb\dataTypes\DataTypeInterface, \JsonSerializable
 {
     private int $size = 1;
     private bool $unsigned = true;
@@ -11,7 +11,6 @@ class Boolean implements \obray\reflectdb\dataTypes\DataTypeInterface
 
     public function __construct($value)
     {
-        print_r($value);
         $this->value = (bool)$value;
     }
 
@@ -33,5 +32,10 @@ class Boolean implements \obray\reflectdb\dataTypes\DataTypeInterface
     public function __toSQLWhere(string $column, $operator='=')
     {
         return $column . $operator . ':' . $column;
+    }
+
+    public function jsonSerialize()
+    {    
+        return $this->value;
     }
 }

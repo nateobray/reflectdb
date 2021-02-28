@@ -2,7 +2,7 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class Varchar implements \obray\reflectdb\dataTypes\DataTypeInterface
+class Varchar implements \obray\reflectdb\dataTypes\DataTypeInterface, \JsonSerializable
 {
     protected int $size = 255;
     protected ?string $value;
@@ -27,4 +27,8 @@ class Varchar implements \obray\reflectdb\dataTypes\DataTypeInterface
         return \PDO::PARAM_STR|\PDO::PARAM_NULL;
     }
 
+    public function jsonSerialize()
+    {    
+        return $this->value;
+    }
 }

@@ -4,7 +4,7 @@ namespace obray\reflectdb\dataTypes;
 
 use \obray\reflectdb\dataTypes\DataTypeInterface;
 
-class Integer implements DataTypeInterface
+class Integer implements DataTypeInterface, \JsonSerializable
 {
     protected int $size = 11;
     protected bool $unsigned = false;
@@ -44,5 +44,10 @@ class Integer implements DataTypeInterface
     public function __toSQLWhere(string $column, $operator='=')
     {
         return $column . $operator . ':'.$column;
+    }
+
+    public function jsonSerialize()
+    {    
+        return $this->value;
     }
 }

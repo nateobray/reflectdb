@@ -2,7 +2,7 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class DateTime implements \obray\reflectdb\dataTypes\DataTypeInterface
+class DateTime implements \obray\reflectdb\dataTypes\DataTypeInterface, \JsonSerializable
 {
     public function __construct($datetime)
     {
@@ -22,5 +22,10 @@ class DateTime implements \obray\reflectdb\dataTypes\DataTypeInterface
     public function __toSQL(string $column): string
     {
         return '"' . $this->value->format("Y-m-d H:i:s") . '"';
+    }
+
+    public function jsonSerialize()
+    {    
+        return $this->value->format("Y-m-d\TH:i:s\Z");
     }
 }

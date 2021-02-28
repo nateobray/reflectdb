@@ -2,7 +2,7 @@
 
 namespace obray\reflectdb\dataTypes;
 
-class Text implements \obray\reflectdb\dataTypes\DataTypeInterface
+class Text implements \obray\reflectdb\dataTypes\DataTypeInterface, \JsonSerializable
 {
     protected ?string $value;
 
@@ -26,4 +26,8 @@ class Text implements \obray\reflectdb\dataTypes\DataTypeInterface
         return \PDO::PARAM_STR|\PDO::PARAM_NULL;
     }
 
+    public function jsonSerialize()
+    {    
+        return $this->value;
+    }
 }
